@@ -1,4 +1,4 @@
-package com.ll.domain.system;
+package com.ll.domain.WiseSaying;
 
 import com.ll.WiseSaying;
 
@@ -24,7 +24,9 @@ public class WiseSayingController {
 
         int id = ++lastId;
 
-        wiseSayingList.add(new WiseSaying(id, author, content));
+        WiseSaying wiseSaying = new WiseSaying(author, content);
+        wiseSaying.setId(id);
+        wiseSayingList.add(wiseSaying);
 
         System.out.printf("%d번 명언이 등록되었습니다.\n", id);
     }

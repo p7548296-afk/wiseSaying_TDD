@@ -1,7 +1,7 @@
 package com.ll;
 
 import com.ll.domain.system.SystemController;
-import com.ll.domain.system.WiseSayingController;
+import com.ll.domain.WiseSaying.WiseSayingController;
 
 import java.util.Scanner;
 
