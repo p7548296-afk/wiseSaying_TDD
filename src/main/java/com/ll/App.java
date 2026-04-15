@@ -1,7 +1,8 @@
 package com.ll;
 
-import com.ll.domain.system.SystemController;
 import com.ll.domain.WiseSaying.WiseSayingController;
+import com.ll.domain.system.SystemController;
+import com.ll.global.rq.Rq;
 
 import java.util.Scanner;
 
@@ -12,21 +13,22 @@ public class App {
         this.scanner = AppContext.scanner;
     }
 
-    public void run () {
+    public void run() {
         SystemController systemController = AppContext.systemController;
-        WiseSayingController wiseSayingController = new WiseSayingController();
+        WiseSayingController wiseSayingController = AppContext.wiseSayingController;
 
         System.out.println("== 명언 앱 ==");
 
         while (true) {
-            System.out.println("명령) ");
+            System.out.print("명령) ");
             String cmd = scanner.nextLine();
-            String actionName = cmd.split("\\?")[0];
+            Rq rq = new Rq(cmd);
 
-            switch (actionName) {
+            switch (rq.getActionName()) {
                 case "등록" -> wiseSayingController.actionWrite();
                 case "목록" -> wiseSayingController.actionList();
-                case "삭제" -> wiseSayingController.actionDelete(cmd);
+                case "삭제" -> wiseSayingController.actionDelete(rq);
+                case "수정" -> wiseSayingController.actionModify(rq);
                 case "종료" -> {
                     systemController.actionExit();
                     return;
