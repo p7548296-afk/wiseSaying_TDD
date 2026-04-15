@@ -3,15 +3,12 @@ package com.ll.domain.WiseSaying;
 import com.ll.AppContext;
 import com.ll.WiseSaying;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class WiseSayingController {
-    private final List<WiseSaying> wiseSayingList = new ArrayList<>();
     private final Scanner scanner;
     private final WiseSayingService wiseSayingService;
-    private int lastId = 0;
 
     public WiseSayingController() {
         this.scanner = AppContext.scanner;
@@ -25,21 +22,39 @@ public class WiseSayingController {
         System.out.println("작가 : ");
         String author = scanner.nextLine();
 
-        int id = ++lastId;
+        WiseSaying wiseSaying = wiseSayingService.write(content, author);
 
-        WiseSaying wiseSaying = new WiseSaying(author, content);
-        wiseSaying.setId(id);
-        wiseSayingList.add(wiseSaying);
-
-        System.out.printf("%d번 명언이 등록되었습니다.\n", id);
+        System.out.printf("%d번 명언이 등록되었습니다.\n", wiseSaying.getId());
     }
 
     public void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
-        for (int i = wiseSayingList.size() - 1; i >= 0; i--) {
-            WiseSaying wiseSaying = wiseSayingList.get(i);
+        for (WiseSaying wiseSaying : wiseSayingService.findForList()) {
             System.out.printf("%d / %s / %s\n", wiseSaying.getId(), wiseSaying.getAuthor(), wiseSaying.getContent());
         }
+    }
+
+    public void actionDelete(String cmd) {
+        String[] cmdBits = cmd.split("\\?", 2);
+        String queryString = cmdBits[1];
+
+        Map<String, String> params = Arrays
+                .stream(queryString.split("&"))
+                .map(e -> e.split("=", 2))
+                .filter(e -> e.length == 2 && !e[0].isBlank() && !e[1].isBlank())
+                .collect(Collectors.toMap(e -> e[0].trim(), e -> e[1].trim()));
+
+        String idStr = params.getOrDefault("id", "");
+        int id = Integer.parseInt(idStr);
+
+        boolean isDeleted = wiseSayingService.delete(id);
+
+        if (!isDeleted) {
+            System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
+            return;
+        }
+
+        System.out.printf("%d번 명언이 삭제되었습니다.\n", id);
     }
 }
