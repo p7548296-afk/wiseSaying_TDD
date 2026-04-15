@@ -8,8 +8,6 @@ public class Main {
     public static void main(String[] args) {
         AppContext.scanner = new Scanner(System.in);
         new App().run();
-//        lab1();
-//        lab2();
     }
 
     public static void lab1 () {
