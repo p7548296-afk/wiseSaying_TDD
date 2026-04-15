@@ -1,5 +1,6 @@
 package com.ll.domain.WiseSaying;
 
+import com.ll.AppContext;
 import com.ll.WiseSaying;
 
 import java.util.ArrayList;
@@ -9,10 +10,12 @@ import java.util.Scanner;
 public class WiseSayingController {
     private final List<WiseSaying> wiseSayingList = new ArrayList<>();
     private final Scanner scanner;
+    private final WiseSayingService wiseSayingService;
     private int lastId = 0;
 
-    public WiseSayingController(Scanner scanner) {
-        this.scanner = scanner;
+    public WiseSayingController() {
+        this.scanner = AppContext.scanner;
+        this.wiseSayingService = AppContext.wiseSayingService;
     }
 
     public void actionWrite() {
